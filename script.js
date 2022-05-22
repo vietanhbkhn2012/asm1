@@ -1,8 +1,8 @@
 'use strict';
+
 // Select elements
 const submitBtn = document.getElementById('submit-btn');
 const healthyBtn = document.getElementById('healthy-btn');
-const calculateBMI = document.getElementById('calculateBMI-btn');
 const idInput = document.getElementById('input-id');
 const nameInput = document.getElementById('input-name');
 const ageInput = document.getElementById('input-age');
@@ -14,10 +14,36 @@ const breedInput = document.getElementById('input-breed');
 const vaccinatedInput = document.getElementById('input-vaccinated');
 const dewormedInput = document.getElementById('input-dewormed');
 const sterilizedInput = document.getElementById('input-sterilized');
-
-const petArr = [];
+let petArr = [];
 const tableBodyEl = document.getElementById('tbody');
-tableBodyEl.innerHTML = '';
+
+// Import JS
+import { saveToStorage, getFromStorage } from './script/storage.js';
+
+// Reload or reopen app
+if (Array.isArray(getFromStorage('petArr'))) {
+  let test = true;
+  let checkArr = ['id', 'name', 'type', 'weight', 'length', 'color', 'breed', 'vaccinated', 'dewormed', 'sterilized', 'date'];
+  getFromStorage('petArr').forEach(pet => {
+    checkArr.forEach(check => {
+      if (!pet.hasOwnProperty(`${check}`)) {
+        test = false;
+      }
+    });
+  });
+  if (test) {
+    petArr = getFromStorage('petArr');
+    newDate(petArr);
+    renderTableData(petArr);
+  }
+}
+
+// Convert date string to date
+function newDate(petArr) {
+  petArr.forEach((pet, i, petArr) => {
+    petArr[i].date = new Date(pet.date);
+  });
+}
 
 // Show pet list
 function renderTableData(pets) {
@@ -49,12 +75,25 @@ function genRow(row) {
     <td>
       <i class="bi ${row.sterilized ? 'bi-check-circle-fill' : 'bi-x-circle-fill'} "></i>
     </td>
-    <td>${row.bmi}</td>
     <td>${row.date.getDate()}/${row.date.getMonth() + 1}/${row.date.getFullYear()}</td>
     <td>
       <button type="button" class="btn btn-danger btn-delete" id="btn-delete" data-id="${row.id}">Delete</button>
     </td>
   `;
+}
+
+// Show breeds by type
+let breedArr = getFromStorage('breedArr');
+typeInput.addEventListener('click', renderBreed);
+function renderBreed() {
+  breedInput.innerHTML = '<option>Select Breed</option>';
+  breedArr
+    .filter(breed => breed.type === typeInput.value)
+    .forEach(breed => {
+      const option = document.createElement('option');
+      option.innerHTML = breed.breed;
+      breedInput.appendChild(option);
+    });
 }
 
 // Catch the "Submit" Click event
@@ -72,9 +111,9 @@ submitBtn.addEventListener('click', function () {
     vaccinated: vaccinatedInput.checked,
     dewormed: dewormedInput.checked,
     sterilized: sterilizedInput.checked,
-    bmi: '?',
     date: new Date(),
   };
+
   // Validate valid data
   const validatedForm = function () {
     let sameId = false;
@@ -141,10 +180,10 @@ submitBtn.addEventListener('click', function () {
   // Add pets to the list
   if (validated) {
     petArr.push(data);
+    saveToStorage('petArr', petArr);
     renderTableData(petArr);
     resetForm();
   }
-
   //Delete the data just entered on the Form
   function resetForm() {
     document.getElementsByTagName('form')[0].reset();
@@ -163,7 +202,7 @@ tableBodyEl.addEventListener('click', function (e) {
     petArr.findIndex(pet => pet.id == petId),
     1
   );
-  //reload
+  saveToStorage('petArr', petArr);
   renderTableData(petArr);
 });
 
@@ -180,21 +219,4 @@ healthyBtn.addEventListener('click', function () {
     renderTableData(healthyPetArr);
   }
   healthyCheck = healthyCheck === false ? true : false;
-});
-
-// Calculate BMI
-calculateBMI.addEventListener('click', function () {
-  let calculate;
-  for (let i = 0; i < petArr.length; i++) {
-    if (petArr[i].type === 'Cat') {
-      calculate = (petArr[i].weight * 886) / petArr[i].length ** 2;
-      petArr[i].bmi = calculate.toFixed(2);
-    } else {
-      calculate = (petArr[i].weight * 703) / petArr[i].length ** 2;
-      petArr[i].bmi = calculate.toFixed(2);
-    }
-  }
-  renderTableData(petArr);
-  healthyBtn.innerHTML = 'Show Healthy Pet';
-  healthyCheck = true;
 });
