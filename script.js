@@ -84,7 +84,7 @@ function genRow(row) {
 
 // Show breeds by type
 let breedArr = getFromStorage('breedArr');
-typeInput.addEventListener('click', renderBreed);
+breedInput.addEventListener('click', renderBreed);
 function renderBreed() {
   breedInput.innerHTML = '<option>Select Breed</option>';
   breedArr
