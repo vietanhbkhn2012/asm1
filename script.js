@@ -1,5 +1,8 @@
 'use strict';
 
+// Import JS
+import { saveToStorage, getFromStorage } from './script/storage.js';
+
 // Select elements
 const submitBtn = document.getElementById('submit-btn');
 const healthyBtn = document.getElementById('healthy-btn');
@@ -15,12 +18,38 @@ const vaccinatedInput = document.getElementById('input-vaccinated');
 const dewormedInput = document.getElementById('input-dewormed');
 const sterilizedInput = document.getElementById('input-sterilized');
 let petArr = [];
+let breedArr = [];
 const tableBodyEl = document.getElementById('tbody');
 
-// Import JS
-import { saveToStorage, getFromStorage } from './script/storage.js';
+// Reload BreedArr
+if (Array.isArray(getFromStorage('breedArr'))) {
+  let test = true;
+  let checkArr = ['type', 'breed'];
+  getFromStorage('breedArr').forEach(breed => {
+    checkArr.forEach(check => {
+      if (!breed.hasOwnProperty(`${check}`)) {
+        test = false;
+      }
+    });
+  });
+  if (test) {
+    // Show breeds by type
+    breedArr = getFromStorage('breedArr');
+    typeInput.addEventListener('change', renderBreed);
+    function renderBreed() {
+      breedInput.innerHTML = '<option>Select Breed</option>';
+      breedArr
+        .filter(breed => breed.type === typeInput.value)
+        .forEach(breed => {
+          const option = document.createElement('option');
+          option.innerHTML = breed.breed;
+          breedInput.appendChild(option);
+        });
+    }
+  }
+}
 
-// Reload or reopen app
+// Reload PetArr
 if (Array.isArray(getFromStorage('petArr'))) {
   let test = true;
   let checkArr = ['id', 'name', 'type', 'weight', 'length', 'color', 'breed', 'vaccinated', 'dewormed', 'sterilized', 'date'];
@@ -80,20 +109,6 @@ function genRow(row) {
       <button type="button" class="btn btn-danger btn-delete" id="btn-delete" data-id="${row.id}">Delete</button>
     </td>
   `;
-}
-
-// Show breeds by type
-let breedArr = getFromStorage('breedArr');
-typeInput.addEventListener('click', renderBreed);
-function renderBreed() {
-  breedInput.innerHTML = '<option>Select Breed</option>';
-  breedArr
-    .filter(breed => breed.type === typeInput.value)
-    .forEach(breed => {
-      const option = document.createElement('option');
-      option.innerHTML = breed.breed;
-      breedInput.appendChild(option);
-    });
 }
 
 // Catch the "Submit" Click event

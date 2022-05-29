@@ -10,7 +10,7 @@ const submitBtn = document.getElementById('submit-btn');
 let breedArr = [];
 const tableBodyEl = document.getElementById('tbody');
 
-// Reload or reopen app
+// Reload BreedArr
 if (Array.isArray(getFromStorage('breedArr'))) {
   let test = true;
   let checkArr = ['type', 'breed'];

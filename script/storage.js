@@ -1,13 +1,13 @@
 'use strict';
 
+// Export JS
+export { saveToStorage, getFromStorage };
+
 // Toggle class active when click on navbar
 const sidebarEl = document.getElementById('sidebar');
 sidebarEl.addEventListener('click', function () {
   sidebarEl.classList.toggle('active');
 });
-
-// Export JS
-export { saveToStorage, getFromStorage };
 
 // Save to localStorage
 function saveToStorage(key, value) {
