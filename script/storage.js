@@ -1,8 +1,5 @@
 'use strict';
 
-// Export JS
-export { saveToStorage, getFromStorage };
-
 // Toggle class active when click on navbar
 const sidebarEl = document.getElementById('sidebar');
 sidebarEl.addEventListener('click', function () {

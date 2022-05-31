@@ -1,8 +1,5 @@
 'use strict';
 
-// Import JS
-import { saveToStorage, getFromStorage } from './script/storage.js';
-
 // Select elements
 const submitBtn = document.getElementById('submit-btn');
 const healthyBtn = document.getElementById('healthy-btn');

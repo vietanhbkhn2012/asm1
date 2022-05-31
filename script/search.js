@@ -1,9 +1,7 @@
 'use strict';
 
-// Import JS
-import { getFromStorage } from './storage.js';
-
 // Select elements
+const findBtn = document.getElementById('find-btn');
 const idInput = document.getElementById('input-id');
 const nameInput = document.getElementById('input-name');
 const typeInput = document.getElementById('input-type');
@@ -14,7 +12,6 @@ const sterilizedInput = document.getElementById('input-sterilized');
 let petArr = [];
 let breedArr = [];
 const tableBodyEl = document.getElementById('tbody');
-const findBtn = document.getElementById('find-btn');
 
 // Reload BreedArr
 if (Array.isArray(getFromStorage('breedArr'))) {
@@ -101,7 +98,7 @@ function genRow(row) {
   `;
 }
 
-// Find pets
+// Search pets
 findBtn.addEventListener('click', find);
 function find() {
   //Get data from input form

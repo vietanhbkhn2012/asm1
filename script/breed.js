@@ -1,12 +1,10 @@
 'use strict';
 
-// Import JS
-import { saveToStorage, getFromStorage } from './storage.js';
-
 // Select elements
-const breedInput = document.getElementById('input-breed');
-const typeInput = document.getElementById('input-type');
 const submitBtn = document.getElementById('submit-btn');
+const typeInput = document.getElementById('input-type');
+const breedInput = document.getElementById('input-breed');
+let petArr = [];
 let breedArr = [];
 const tableBodyEl = document.getElementById('tbody');
 

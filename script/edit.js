@@ -1,11 +1,8 @@
 'use strict';
 
-// Import JS
-import { saveToStorage, getFromStorage } from './storage.js';
-
 // Select elements
-const submitBtn = document.getElementById('submit-btn');
 const activeForm = document.getElementById('container-form');
+const submitBtn = document.getElementById('submit-btn');
 const idInput = document.getElementById('input-id');
 const nameInput = document.getElementById('input-name');
 const ageInput = document.getElementById('input-age');
